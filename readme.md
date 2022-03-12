@@ -1,4 +1,4 @@
-# NIBBLE
+# SNAP
 
 ![SNAP](https://nullbits.co/static/img/snap10.jpg)
 
