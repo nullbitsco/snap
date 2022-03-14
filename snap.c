@@ -101,7 +101,9 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
         case RESET:
             if (record->event.pressed) {
                 set_bitc_LED(LED_DIM);
+                #ifdef RGBLIGHT_ENABLE
                 rgblight_disable_noeeprom();
+                #endif
                 #ifdef OLED_ENABLE
                 oled_off();
                 #endif
@@ -112,6 +114,7 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
         case DISC_MUTE:
             if (record->event.pressed) {
                 tap_code(KC_F23);
+                #ifdef RGBLIGHT_ENABLE
                 if (!rgblight_is_enabled()) break;
 
                 if (muted) {
@@ -121,6 +124,7 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
                     uint8_t val = rgblight_get_val();
                     rgblight_sethsv_range(255, 255, val, 1, 5);
                 }
+                #endif
                 muted = !muted;
             }
             break;

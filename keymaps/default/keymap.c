@@ -43,6 +43,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 // clang-format on
 
 // RGB config, for changing RGB settings on non-VIA firmwares
+#ifdef RGBLIGHT_ENABLE
 void change_RGB(bool clockwise) {
     bool shift = get_mods() & MOD_MASK_SHIFT;
     bool alt   = get_mods() & MOD_MASK_ALT;
@@ -75,11 +76,14 @@ void change_RGB(bool clockwise) {
         }
     }
 }
+#endif
 
 bool encoder_update_user(uint8_t index, bool clockwise) {
     if (!layer_state_is(_BASE)) {
         // change RGB settings and don't do anything else
+        #ifdef RGBLIGHT_ENABLE
         change_RGB(clockwise);
+        #endif
         return false;
     }
     return true;
