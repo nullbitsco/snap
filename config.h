@@ -23,7 +23,8 @@
 // #define KEYBOARD_REMOTE // Force remote mode
 
 // Workaround for freezing after MacOS sleep
-#define USB_SUSPEND_WAKEUP_DELAY 200
+// Only enable if you have issues
+// #define USB_SUSPEND_WAKEUP_DELAY 200
 
 /* USB Device descriptor parameter */
 #define VENDOR_ID       0x6E61
@@ -33,6 +34,11 @@
 #define MANUFACTURER    nullbits
 #define PRODUCT         SNAP
 
+/* space savers */
+#define NO_ACTION_MACRO
+#define NO_ACTION_FUNCTION
+
+/* split config */
 #define SOFT_SERIAL_PIN E6
 #define SPLIT_HAND_PIN B6
 #define DISABLE_SYNC_TIMER
@@ -79,4 +85,4 @@
 #define AUDIO_PIN B6
 
 /* Optional split transactions */
-#define SPLIT_LED_STATE_ENABLE
+#define SPLIT_OLED_ENABLE
