@@ -97,37 +97,72 @@ static void render_nullbits_logo(void) {
 #endif
 }
 
+int get_free_ram (void) {
+  extern int __heap_start, *__brkval;
+  int v;
+  int diff = (int) &v - (__brkval == 0 ? (int) &__heap_start : (int) __brkval);
+  return diff;
+}
+
 static void render_status(void) {
-    oled_write_P(PSTR("Snap75 "), false);
+    oled_set_cursor(0, 0);
+    oled_write_P(PSTR("SNAP75 "), false);
     oled_write_P(PSTR("Layer "), false);
     switch (get_highest_layer(layer_state)) {
-        case _BASE:
-            oled_write_P(PSTR("Base\n\n"), false);
-            break;
         case _VIA1:
-            oled_write_P(PSTR("Fn1 \n\n"), false);
+            oled_write_P(PSTR("FN1 "), false);
             break;
         case _VIA2:
-            oled_write_P(PSTR("Fn2 \n\n"), false);
+            oled_write_P(PSTR("FN2 "), false);
             break;
         case _VIA3:
-            oled_write_P(PSTR("Fn3 \n\n"), false);
+            oled_write_P(PSTR("FN3 "), false);
             break;
-        default:
-            oled_write_P(PSTR("????\n\n"), false);
+        default: // use BASE case as default
+            oled_write_P(PSTR("Base"), false);
     }
 
     // Host Keyboard LED Status
+    oled_set_cursor(0, 1);
     uint8_t led_usb_state = host_keyboard_leds();
-    oled_write_P(IS_LED_ON(led_usb_state, USB_LED_CAPS_LOCK) ? PSTR("CAPLCK ") : PSTR("       "), false);
-    oled_write_P(IS_LED_ON(led_usb_state, USB_LED_NUM_LOCK) ? PSTR("NUMLCK ") : PSTR("       "), false);
-    oled_write_P(IS_LED_ON(led_usb_state, USB_LED_SCROLL_LOCK) ? PSTR("SCRLCK ") : PSTR("       "), false);
 
+    oled_write_ln_P(PSTR(""), false);
+
+    if (IS_LED_ON(led_usb_state, USB_LED_CAPS_LOCK)) {
+        oled_set_cursor(0, 1);
+        oled_write_P(PSTR("CAPS"), false);
+    }
+
+    if (IS_LED_ON(led_usb_state, USB_LED_NUM_LOCK)) {
+        oled_set_cursor(5, 1);
+        oled_write_P(PSTR("NUM"), false);
+    }
+
+    if (IS_LED_ON(led_usb_state, USB_LED_SCROLL_LOCK)) {
+        oled_set_cursor(9, 1);
+        oled_write_P(PSTR("SCR"), false);
+    }
+
+    // WPM and free RAM
+    oled_set_cursor(0, 2);
+    oled_write_P(PSTR("WPM "), false);
     uint8_t current_wpm = get_current_wpm();
     oled_write(get_u8_str(current_wpm, '0'), false);
+
+    oled_set_cursor(8, 2);
+    oled_write_P(PSTR("RAM "), false);
+    dprintf("RAM: %d\n", get_free_ram());
+    uint16_t free_ram = (uint16_t)get_free_ram();
+    oled_write(get_u16_str(free_ram, '0'), false);
 }
 
 bool oled_task_user(void) {
+    #if defined RGBLIGHT_ENABLE && defined MATCH_OLED_RGB_BRIGHTNESS
+    // Sync OLED brightness to RGB LED brightness
+    if (rgblight_is_enabled()) {
+        oled_set_brightness(rgblight_get_val());
+    }
+    #endif
     if (is_keyboard_master()) {
         render_status();
     } else {

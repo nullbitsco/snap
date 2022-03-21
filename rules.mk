@@ -23,6 +23,8 @@ SPLIT_KEYBOARD = yes       # Split common
 LTO_ENABLE = yes           # Use Link Time Optimization
 OLED_DRIVER_ENABLE = no    # Enables the use of OLED displays
 ENCODER_ENABLE = yes       # Enables the use of one or more encoders
+SPACE_CADET_ENABLE = no    # Enables the use of Space Cadet
+GRAVE_ESC_ENABLE = no      # Enables the use of grave key as escape key
 RGBLIGHT_ENABLE = yes      # Enable keyboard RGB underglow
 CUSTOM_MATRIX = lite       # Split custom matrix
 

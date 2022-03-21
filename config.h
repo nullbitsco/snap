@@ -35,8 +35,12 @@
 #define PRODUCT         SNAP
 
 /* space savers */
+// #define NO_ACTION_TAPPING // Waiting on QMK #11528
 #define NO_ACTION_MACRO
 #define NO_ACTION_FUNCTION
+#define NO_ACTION_ONESHOT
+#define IGNORE_MOD_TAP_INTERRUPT
+#define TAPPING_FORCE_HOLD
 
 /* split config */
 #define SOFT_SERIAL_PIN E6
@@ -86,3 +90,4 @@
 
 /* Optional split transactions */
 #define SPLIT_OLED_ENABLE
+#define SPLIT_LED_STATE_ENABLE

@@ -45,7 +45,9 @@ static void process_encoder_matrix(encodermap_t pos) {
 }
 
 bool encoder_update_kb(uint8_t index, bool clockwise) {
+    #ifdef ENCODER_ENABLE
     if (!encoder_update_user(index, clockwise)) return false;
+    #endif
     process_encoder_matrix(encoder_map[index][clockwise ? 0 : 1]);
     return true;
 }
@@ -60,8 +62,6 @@ void keyboard_post_init_kb(void) {
     #ifdef CONSOLE_ENABLE
     debug_enable = true;
     debug_matrix = true;
-    dprintf("split hand: %s\n", is_keyboard_left() ? "LEFT" : "RIGHT");
-    dprintf("master/slave: %s\n", is_keyboard_master() ? "MASTER" : "SLAVE");
     #endif
     keyboard_post_init_user();
 }
@@ -91,7 +91,7 @@ bool led_update_kb(led_t led_state) {
 bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
 // If console is enabled, it will print the matrix position and status of each key pressed
     #ifdef CONSOLE_ENABLE
-    dprintf("kc: 0x%04X, col: %u, row: %u, pressed: %b, time: %u, interrupt: %b, count: %u\n", keycode, record->event.key.col, record->event.key.row, record->event.pressed, record->event.time, record->tap.interrupted, record->tap.count);
+    dprintf("kc: 0x%04X, col: %u, row: %u, pressed: %b, time: %u\n", keycode, record->event.key.col, record->event.key.row, record->event.pressed, record->event.time);
     #endif
 
     process_record_remote_kb(keycode, record);
