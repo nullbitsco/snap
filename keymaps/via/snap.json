@@ -4,7 +4,6 @@
   "productId": "0x6063",
   "lighting": "qmk_rgblight",
   "customKeycodes": [
-    {"name": "Program Keyboard", "title": "Program Keyboard", "shortName": "Prog"},
     {"name": "Discord Mute", "title": "Discord Mute", "shortName": "Disc Mute"},
     {"name": "Super Alt Tab", "title": "Super Alt Tab", "shortName": "S.A.T."}
   ],
