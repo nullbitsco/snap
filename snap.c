@@ -82,14 +82,13 @@ void matrix_scan_kb(void) {
 bool led_update_kb(led_t led_state) {
     bool res = led_update_user(led_state);
     if (res) {
-        if (is_keyboard_left()) set_bitc_LED(led_state.caps_lock ? LED_DIM : LED_OFF);
-        else set_bitc_LED(led_state.num_lock ? LED_DIM : LED_OFF);
+        if (is_keyboard_master()) set_bitc_LED(led_state.caps_lock ? LED_DIM : LED_OFF);
     }
     return res;
 }
 
 bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
-// If console is enabled, it will print the matrix position and status of each key pressed
+    // If console is enabled, it will print the matrix position and status of each key pressed
     #ifdef CONSOLE_ENABLE
     dprintf("kc: 0x%04X, col: %u, row: %u, pressed: %b, time: %u\n", keycode, record->event.key.col, record->event.key.row, record->event.pressed, record->event.time);
     #endif

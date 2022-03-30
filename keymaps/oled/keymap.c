@@ -135,7 +135,7 @@ static void render_status(void) {
 
     if (IS_LED_ON(led_usb_state, USB_LED_NUM_LOCK)) {
         oled_set_cursor(5, 1);
-        oled_write_P(PSTR("NUM"), false);
+        oled_write_P(PSTR("NUM"), true);
     }
 
     if (IS_LED_ON(led_usb_state, USB_LED_SCROLL_LOCK)) {
@@ -147,13 +147,12 @@ static void render_status(void) {
     oled_set_cursor(0, 2);
     oled_write_P(PSTR("WPM "), false);
     uint8_t current_wpm = get_current_wpm();
-    oled_write(get_u8_str(current_wpm, '0'), false);
+    oled_write(get_u8_str(current_wpm, '0'), true);
 
     oled_set_cursor(8, 2);
     oled_write_P(PSTR("RAM "), false);
-    dprintf("RAM: %d\n", get_free_ram());
     uint16_t free_ram = (uint16_t)get_free_ram();
-    oled_write(get_u16_str(free_ram, '0'), false);
+    oled_write(get_u16_str(free_ram, '0'), true);
 }
 
 bool oled_task_user(void) {

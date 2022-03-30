@@ -24,7 +24,7 @@
 
 // Workaround for freezing after MacOS sleep
 // Only enable if you have issues
-// #define USB_SUSPEND_WAKEUP_DELAY 200
+// #define USB_SUSPEND_WAKEUP_DELAY 500
 
 /* USB Device descriptor parameter */
 #define VENDOR_ID       0x6E61
@@ -43,6 +43,7 @@
 #define TAPPING_FORCE_HOLD
 
 /* split config */
+// #define SPLIT_USB_DETECT // Enable if you have issues with USB 
 #define SOFT_SERIAL_PIN E6
 #define SPLIT_HAND_PIN B6
 #define DISABLE_SYNC_TIMER
@@ -90,4 +91,3 @@
 
 /* Optional split transactions */
 #define SPLIT_OLED_ENABLE
-#define SPLIT_LED_STATE_ENABLE
