@@ -16,6 +16,10 @@
 #include QMK_KEYBOARD_H
 #include "bongo.h"
 
+// NOTE:
+// In order to get the slave oled to receive keypresses:
+// See: https://zenn.dev/teppeis/articles/2021-05-qmk-fire-process-record-in-slave
+
 // clang-format off
 enum layers {
     _BASE,
@@ -60,6 +64,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 // clang-format on
 
+// Custom oled timeout configuration
+#define CUSTOM_OLED_TIMEOUT 30000
+uint32_t oled_timer;
+
+uint8_t current_wpm = 0;
+
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
     if (is_keyboard_left())
         return OLED_ROTATION_0;
@@ -67,11 +77,11 @@ oled_rotation_t oled_init_user(oled_rotation_t rotation) {
         return OLED_ROTATION_180;
 }
 
-int get_free_ram (void) {
-  extern int __heap_start, *__brkval;
-  int v;
-  int diff = (int) &v - (__brkval == 0 ? (int) &__heap_start : (int) __brkval);
-  return diff;
+int get_free_ram(void) {
+    extern int __heap_start, *__brkval;
+    int        v;
+    int        diff = (int)&v - (__brkval == 0 ? (int)&__heap_start : (int)__brkval);
+    return diff;
 }
 
 static void render_status(void) {
@@ -116,7 +126,6 @@ static void render_status(void) {
     // WPM and free RAM
     oled_set_cursor(0, 2);
     oled_write_P(PSTR("WPM "), false);
-    uint8_t current_wpm = get_current_wpm();
     oled_write(get_u8_str(current_wpm, '0'), true);
 
     oled_set_cursor(8, 2);
@@ -126,12 +135,24 @@ static void render_status(void) {
 }
 
 bool oled_task_user(void) {
-    #if defined RGBLIGHT_ENABLE && defined MATCH_OLED_RGB_BRIGHTNESS
+    // Custom oled timeout
+    if (timer_elapsed32(oled_timer) > CUSTOM_OLED_TIMEOUT) {
+        oled_off();
+        return true;
+    } else {
+        oled_on();
+    }
+
+    // Update wpm
+    current_wpm = get_current_wpm();
+
+#if defined RGBLIGHT_ENABLE && defined MATCH_OLED_RGB_BRIGHTNESS
     // Sync OLED brightness to RGB LED brightness
     if (rgblight_is_enabled()) {
         oled_set_brightness(rgblight_get_val());
     }
-    #endif
+#endif
+
     if (is_keyboard_master()) {
         render_status();
     } else {
@@ -141,7 +162,19 @@ bool oled_task_user(void) {
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  bongo_process_record(record);
+    if (record->event.pressed) {
+        oled_timer = timer_read32();
+    }
 
-  return true;
+    bongo_process_record(record);
+
+    return true;
+}
+
+bool should_process_keypress(void) {
+    return true;
+}
+
+void suspend_wakeup_init_user(void) {
+    oled_timer = timer_read32();
 }
