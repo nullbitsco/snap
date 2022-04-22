@@ -147,3 +147,28 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
 
     return true;
 }
+
+// Workaround for sleep issues
+void suspend_power_down_kb(void) {
+    suspend_power_down_user();
+
+    // Turn off underglow
+#    if defined(RGBLIGHT_SLEEP) && defined(RGBLIGHT_ENABLE)
+    rgblight_suspend();
+#    endif
+    // Turn off OLED
+#    ifdef OLED_ENABLE
+    oled_off();
+#    endif
+    // Hack: force one last sync
+    matrix_post_scan();
+}
+
+void suspend_wakeup_init_kb(void) {
+    suspend_wakeup_init_user();
+
+    // Wake up underglow
+#if defined(RGBLIGHT_SLEEP) && defined(RGBLIGHT_ENABLE)
+    rgblight_wakeup();
+#endif
+}

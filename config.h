@@ -22,9 +22,9 @@
 // #define KEYBOARD_HOST // Force host mode
 // #define KEYBOARD_REMOTE // Force remote mode
 
-// Workaround for freezing after MacOS sleep
-// Only enable if you have issues
-// #define USB_SUSPEND_WAKEUP_DELAY 500
+// Workarounds for boot/sleep issues
+#define USB_SUSPEND_WAKEUP_DELAY 250
+#define NO_SUSPEND_POWER_DOWN
 
 /* USB Device descriptor parameter */
 #define VENDOR_ID       0x6E61
@@ -43,7 +43,7 @@
 #define TAPPING_FORCE_HOLD
 
 /* split config */
-// #define SPLIT_USB_DETECT // Enable if you have issues with USB 
+// #define SPLIT_USB_DETECT // Enable if you have issues with USB
 #define SOFT_SERIAL_PIN E6
 #define SPLIT_HAND_PIN B6
 #define DISABLE_SYNC_TIMER
