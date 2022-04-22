@@ -124,23 +124,30 @@ static void render_status(void) {
 
     // Host Keyboard LED Status
     oled_set_cursor(0, 1);
+    static uint8_t persistent_led_state = 0;
     uint8_t led_usb_state = host_keyboard_leds();
 
-    oled_write_ln_P(PSTR(""), false);
+    // Only update if the LED state has changed
+    // Otherwise, the OLED will not turn off if an LED is on.
+    if (persistent_led_state != led_usb_state) {
+        persistent_led_state = led_usb_state;
+        
+        oled_write_ln_P(PSTR(""), false);
 
-    if (IS_LED_ON(led_usb_state, USB_LED_CAPS_LOCK)) {
-        oled_set_cursor(0, 1);
-        oled_write_P(PSTR("CAPS"), false);
-    }
+        if (IS_LED_ON(led_usb_state, USB_LED_CAPS_LOCK)) {
+            oled_set_cursor(0, 1);
+            oled_write_P(PSTR("CAPS"), false);
+        }
 
-    if (IS_LED_ON(led_usb_state, USB_LED_NUM_LOCK)) {
-        oled_set_cursor(5, 1);
-        oled_write_P(PSTR("NUM"), true);
-    }
+        if (IS_LED_ON(led_usb_state, USB_LED_NUM_LOCK)) {
+            oled_set_cursor(5, 1);
+            oled_write_P(PSTR("NUM"), true);
+        }
 
-    if (IS_LED_ON(led_usb_state, USB_LED_SCROLL_LOCK)) {
-        oled_set_cursor(9, 1);
-        oled_write_P(PSTR("SCR"), false);
+        if (IS_LED_ON(led_usb_state, USB_LED_SCROLL_LOCK)) {
+            oled_set_cursor(9, 1);
+            oled_write_P(PSTR("SCR"), false);
+        }
     }
 
     // WPM and free RAM
@@ -158,8 +165,10 @@ static void render_status(void) {
 bool oled_task_user(void) {
     #if defined RGBLIGHT_ENABLE && defined MATCH_OLED_RGB_BRIGHTNESS
     // Sync OLED brightness to RGB LED brightness
-    if (rgblight_is_enabled()) {
-        oled_set_brightness(rgblight_get_val());
+    // Only update the brightness if it's changed
+    uint16_t rgb_brightness = (rgblight_get_val() * OLED_BRIGHTNESS) >> 8;
+    if (rgblight_is_enabled() && (oled_get_brightness() != rgb_brightness)) {
+        oled_set_brightness(rgb_brightness);
     }
     #endif
     if (is_keyboard_master()) {
