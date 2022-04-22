@@ -64,10 +64,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 // clang-format on
 
-// Custom oled timeout configuration
-#define CUSTOM_OLED_TIMEOUT 30000
-uint32_t oled_timer;
-
 uint8_t current_wpm = 0;
 
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
@@ -104,23 +100,30 @@ static void render_status(void) {
 
     // Host Keyboard LED Status
     oled_set_cursor(0, 1);
+    static uint8_t persistent_led_state = 0;
     uint8_t led_usb_state = host_keyboard_leds();
 
-    oled_write_ln_P(PSTR(""), false);
+    // Only update if the LED state has changed
+    // Otherwise, the OLED will not turn off if an LED is on.
+    if (persistent_led_state != led_usb_state) {
+        persistent_led_state = led_usb_state;
+        
+        oled_write_ln_P(PSTR(""), false);
 
-    if (IS_LED_ON(led_usb_state, USB_LED_CAPS_LOCK)) {
-        oled_set_cursor(0, 1);
-        oled_write_P(PSTR("CAPS"), false);
-    }
+        if (IS_LED_ON(led_usb_state, USB_LED_CAPS_LOCK)) {
+            oled_set_cursor(0, 1);
+            oled_write_P(PSTR("CAPS"), false);
+        }
 
-    if (IS_LED_ON(led_usb_state, USB_LED_NUM_LOCK)) {
-        oled_set_cursor(5, 1);
-        oled_write_P(PSTR("NUM"), true);
-    }
+        if (IS_LED_ON(led_usb_state, USB_LED_NUM_LOCK)) {
+            oled_set_cursor(5, 1);
+            oled_write_P(PSTR("NUM"), true);
+        }
 
-    if (IS_LED_ON(led_usb_state, USB_LED_SCROLL_LOCK)) {
-        oled_set_cursor(9, 1);
-        oled_write_P(PSTR("SCR"), false);
+        if (IS_LED_ON(led_usb_state, USB_LED_SCROLL_LOCK)) {
+            oled_set_cursor(9, 1);
+            oled_write_P(PSTR("SCR"), false);
+        }
     }
 
     // WPM and free RAM
@@ -135,23 +138,8 @@ static void render_status(void) {
 }
 
 bool oled_task_user(void) {
-    // Custom oled timeout
-    if (timer_elapsed32(oled_timer) > CUSTOM_OLED_TIMEOUT) {
-        oled_off();
-        return true;
-    } else {
-        oled_on();
-    }
-
     // Update wpm
     current_wpm = get_current_wpm();
-
-#if defined RGBLIGHT_ENABLE && defined MATCH_OLED_RGB_BRIGHTNESS
-    // Sync OLED brightness to RGB LED brightness
-    if (rgblight_is_enabled()) {
-        oled_set_brightness(rgblight_get_val());
-    }
-#endif
 
     if (is_keyboard_master()) {
         render_status();
@@ -162,19 +150,10 @@ bool oled_task_user(void) {
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    if (record->event.pressed) {
-        oled_timer = timer_read32();
-    }
-
     bongo_process_record(record);
-
     return true;
 }
 
 bool should_process_keypress(void) {
     return true;
-}
-
-void suspend_wakeup_init_user(void) {
-    oled_timer = timer_read32();
 }
