@@ -34,9 +34,12 @@
 
 // Split configuration
 #define SPLIT_TRANSPORT_MIRROR
+#define SPLIT_WPM_ENABLE
 
 // Typehud configuration
 #define TYPEHUD_FILLGRAPH
+#define TYPEHUD_MATRIX_COLS 16
+// #define TYPEHUD_MASTER
 // #define TYPEHUD_MATRIX_ROTATE_90
 // #define TYPEHUD_MATRIX_ROTATE_180
 // #define TYPEHUD_MATRIX_ROTATE_270

@@ -62,7 +62,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 // clang-format on
 
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
-    typehud_init();
+    oled_clear();
+
+#ifdef TYPEHUD_MASTER
+    if (is_keyboard_master()) {
+#else
+    if (!is_keyboard_master()) {
+#endif
+        typehud_init();
+    }
 
     if (is_keyboard_left())
         return OLED_ROTATION_0;
@@ -136,10 +144,14 @@ static void render_status(void) {
 }
 
 bool oled_task_user(void) {
+#ifdef TYPEHUD_MASTER
     if (is_keyboard_master()) {
-        render_status();
-    } else {
+#else
+    if (!is_keyboard_master()) {
+#endif
         typehud_render();
+    } else {
+        render_status();
     }
 
     return true;
@@ -148,5 +160,9 @@ bool oled_task_user(void) {
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     typehud_process_record(record);
 
+    return true;
+}
+
+bool should_process_keypress(void) {
     return true;
 }
