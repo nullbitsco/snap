@@ -98,7 +98,7 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
 
     switch (keycode) {
         case RESET:
-            if (record->event.pressed) {
+            if (record->event.pressed && is_keyboard_master()) {
                 set_bitc_LED(LED_DIM);
                 #ifdef RGBLIGHT_ENABLE
                 rgblight_disable_noeeprom();
