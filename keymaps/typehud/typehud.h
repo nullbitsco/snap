@@ -83,9 +83,10 @@
 
 static bool     is_initialized;
 static uint16_t timer;
-static int8_t   bar_height;
+static uint8_t  bar_height;
 static uint8_t  wpm_arr[_GRAPH_WIDTH];
 static uint8_t  point_arr[_GRAPH_WIDTH];
+static uint8_t  max_wpm;
 
 /*
  * Renders the wpm counter.
@@ -95,6 +96,16 @@ static void render_wpm(uint8_t wpm) {
     oled_write("WPM", false);
     oled_set_cursor(0, 1);
     oled_write(get_u8_str(wpm, '0'), false);
+}
+
+/*
+ * Renders the max wpm counter.
+ */
+static void render_max_wpm(uint8_t max_wpm) {
+    oled_set_cursor(4, 0);
+    oled_write("MAX", false);
+    oled_set_cursor(4, 1);
+    oled_write(get_u8_str(max_wpm, '0'), false);
 }
 
 /*
@@ -223,6 +234,17 @@ static void render_graph(uint8_t wpm) {
     // Render last graph point
     wpm_arr[i] = wpm;
 
+    // Find ath max wpm
+    if (point_arr[i] > bar_height) bar_height = point_arr[i];
+
+    // Find rolling max wpm
+    max_wpm = 0;
+    for (uint8_t j = 0; j < _GRAPH_WIDTH; j++) {
+        if (wpm_arr[j] > max_wpm) {
+            max_wpm = wpm_arr[j];
+        }
+    }
+
     if (point_arr[i] != point_arr[i - 1]) {
         oled_write_pixel(x + i, y - point_arr[i], true);
     }
@@ -311,22 +333,16 @@ static void render_bar(void) {
     uint8_t width  = _BAR_WIDTH;
     uint8_t height = _BAR_HEIGHT;
 
-    // Increment bar height
-    bar_height = (bar_height + 1) % height;
+    static uint8_t last_bar_height = 0;
 
-    // When bar resets back to 0, clear bar pixels
-    if (bar_height % height == 0) {
+    // Only draw/clear pixels when the bar height has increased
+    if (bar_height > last_bar_height) {
         for (uint8_t i = 0; i < width; i++) {
-            for (uint8_t j = 0; j < height; j++) {
-                oled_write_pixel(x + i, j, false);
-            }
+            oled_write_pixel(x + i, height - bar_height, true);
         }
     }
 
-    // Draw new bar pixels
-    for (uint8_t i = 0; i < width; i++) {
-        oled_write_pixel(x + i, height - bar_height, true);
-    }
+    last_bar_height = bar_height;
 }
 
 /*
@@ -334,6 +350,7 @@ static void render_bar(void) {
  */
 static void render_init(void) {
     render_graph(0);
+    render_max_wpm(0);
     render_caret();
     render_matrix(NULL);
     render_axis();
@@ -346,7 +363,6 @@ void typehud_init(void) {
     // Reset variables
     is_initialized = false;
     timer          = 0;
-    bar_height     = -1;
 
     for (uint8_t i = 0; i < _GRAPH_WIDTH; i++) {
         wpm_arr[i]   = 0;
@@ -377,6 +393,8 @@ void typehud_render(void) {
     // Render next graph and caret frame when timer reaches refresh rate
     if (timer_elapsed(timer) > _GRAPH_REFRESH) {
         render_graph(wpm);
+        render_bar();
+        render_max_wpm(max_wpm);
         render_caret();
         timer = timer_read();
     }
@@ -398,9 +416,4 @@ void typehud_process_record(keyrecord_t *record) {
 #endif
     // Render/update matrix
     render_matrix(record);
-
-    // Render/update input bar on keypress
-    if (record->event.pressed) {
-        render_bar();
-    }
 }
