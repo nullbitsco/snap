@@ -19,6 +19,7 @@
 // Old configuration
 #define OLED_BRIGHTNESS 128
 #define OLED_TIMEOUT 30000
+#define OLED_UPDATE_INTERVAL 200
 
 // Selectively define RGB modes to save some space
 // VIA support won't fit otherwise
