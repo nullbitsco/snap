@@ -22,11 +22,15 @@
 #define OLED_UPDATE_INTERVAL 250
 #define OLED_FADE_OUT
 
-// Selectively define RGB modes to save some space
+// On AVR, selectively define RGB modes to save some space
 // VIA support won't fit otherwise
+#if defined(__AVR__)
 #ifdef RGBLIGHT_ENABLE
 #undef RGBLIGHT_ANIMATIONS
 // #define RGBLIGHT_EFFECT_BREATHING
 #define RGBLIGHT_EFFECT_RAINBOW_SWIRL
 #define RGBLIGHT_EFFECT_STATIC_GRADIENT
 #endif //RGB LIGHT_ENABLE
+#endif //__AVR__
+
+#define SPLIT_TRANSPORT_MIRROR

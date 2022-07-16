@@ -38,7 +38,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
              KC_F17,  KC_LCTL,  KC_LGUI, KC_LALT,     MO(_VIA1),         KC_SPC,   KC_SPC,                  MO(_VIA1), KC_RALT,   KC_RCTL,  KC_LEFT,  KC_DOWN,  KC_RGHT
   ),
     [_VIA1] = LAYOUT_all(
-    KC_NO,          RESET,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,    KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,         KC_NO,
+    KC_NO,          QK_BOOT,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,    KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,         KC_NO,
     KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,    KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO, KC_NO,
             KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,          KC_NO,    KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,
             KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,          KC_NO,    KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,          KC_NO,
@@ -71,13 +71,6 @@ oled_rotation_t oled_init_user(oled_rotation_t rotation) {
         return OLED_ROTATION_0;
     else
         return OLED_ROTATION_180;
-}
-
-int get_free_ram(void) {
-    extern int __heap_start, *__brkval;
-    int        v;
-    int        diff = (int)&v - (__brkval == 0 ? (int)&__heap_start : (int)__brkval);
-    return diff;
 }
 
 static void render_status(void) {
@@ -126,15 +119,16 @@ static void render_status(void) {
         }
     }
 
-    // WPM and free RAM
+    // WPM and max WPM
     oled_set_cursor(0, 2);
     oled_write_P(PSTR("WPM "), false);
     oled_write(get_u8_str(current_wpm, '0'), true);
 
     oled_set_cursor(8, 2);
-    oled_write_P(PSTR("RAM "), false);
-    uint16_t free_ram = (uint16_t)get_free_ram();
-    oled_write(get_u16_str(free_ram, '0'), true);
+    oled_write_P(PSTR("MAX "), false);
+    static uint8_t max_wpm;
+    max_wpm = MAX(max_wpm, current_wpm);
+    oled_write(get_u8_str(max_wpm, '0'), true);
 }
 
 bool oled_task_user(void) {

@@ -1,9 +1,3 @@
-# MCU name
-MCU = atmega32u4
-
-# Bootloader selection
-BOOTLOADER = atmel-dfu
-
 # Build Options
 #   change yes to no to disable
 #
@@ -20,7 +14,6 @@ UNICODE_ENABLE = no        # Unicode
 BLUETOOTH_ENABLE = no      # Enable Bluetooth with the Adafruit EZ-Key HID
 AUDIO_ENABLE = no          # Audio output
 SPLIT_KEYBOARD = yes       # Split common
-LTO_ENABLE = yes           # Use Link Time Optimization
 OLED_DRIVER_ENABLE = no    # Enables the use of OLED displays
 ENCODER_ENABLE = yes       # Enables the use of one or more encoders
 SPACE_CADET_ENABLE = no    # Enables the use of Space Cadet
@@ -28,8 +21,9 @@ GRAVE_ESC_ENABLE = no      # Enables the use of grave key as escape key
 RGBLIGHT_ENABLE = yes      # Enable keyboard RGB underglow
 CUSTOM_MATRIX = lite       # Split custom matrix
 
+DEFAULT_FOLDER = nullbitsco/snap/avr
+
 # Project specific files
 SRC +=  common/bitc_led.c \
         common/remote_kb.c \
-        matrix.c \
-        uart.c
+        matrix.c
