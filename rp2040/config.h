@@ -13,7 +13,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-// clang-format off
+
+/* NOTE: This config file is specific to RP2040 builds. */
+
 #pragma once
 
 #include "config_common.h"
@@ -55,5 +57,8 @@
 #define I2C1_SDA_PIN GP2
 #define I2C1_SCL_PIN GP3
 #define I2C_DRIVER I2CD2
-#define SELECT_SOFT_SERIAL_SPEED 3
-#define SERIAL_DEBUG // TODO: remove
+
+// Needed for ARM platforms, as there is no PROGMEM
+#ifndef pgm_read_byte_near
+#define pgm_read_byte_near(addr) pgm_read_byte(addr)
+#endif

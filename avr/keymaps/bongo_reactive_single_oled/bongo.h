@@ -25,11 +25,6 @@
 #define _TAP_FRAME_DURATION  75
 #define _PREP_TIMEOUT        750
 
-// Needed for ARM platforms, as there is no PROGMEM
-#ifndef pgm_read_byte_near
-#define pgm_read_byte_near(addr) pgm_read_byte(addr)
-#endif
-
 enum anim_states
 {
     Idle,

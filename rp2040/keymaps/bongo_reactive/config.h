@@ -16,21 +16,8 @@
 
 #pragma once
 
-#define MATCH_OLED_RGB_BRIGHTNESS
 #define OLED_BRIGHTNESS 128
 #define OLED_TIMEOUT 30000
-#define OLED_UPDATE_INTERVAL 250
-#define OLED_FADE_OUT
 
-// On AVR, selectively define RGB modes to save some space
-// VIA support won't fit otherwise
-#if defined(__AVR__)
-#ifdef RGBLIGHT_ENABLE
-#undef RGBLIGHT_ANIMATIONS
-// #define RGBLIGHT_EFFECT_BREATHING
-#define RGBLIGHT_EFFECT_RAINBOW_SWIRL
-#define RGBLIGHT_EFFECT_STATIC_GRADIENT
-#endif //RGB LIGHT_ENABLE
-#endif //__AVR__
-
+// Split Options
 #define SPLIT_TRANSPORT_MIRROR

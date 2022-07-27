@@ -1,6 +1,8 @@
 # Build Options
 #   change yes to no to disable
 #
+
+# NOTE: This rules.mk is shared between AVR and RP2040 and defines items common to both.
 BOOTMAGIC_ENABLE = no      # Virtual DIP switch configuration
 MOUSEKEY_ENABLE = no       # Mouse keys
 EXTRAKEY_ENABLE = yes      # Audio control and System control

@@ -16,11 +16,6 @@
 #include QMK_KEYBOARD_H
 #include "oled_graphics.h"
 
-// Needed for ARM platforms, as there is no PROGMEM
-#ifndef pgm_read_byte_near
-#define pgm_read_byte_near(addr) pgm_read_byte(addr)
-#endif
-
 // clang-format off
 enum layers {
     _BASE,

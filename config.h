@@ -13,7 +13,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-// clang-format off
+
+/* This file is shared between AVR and RP2040 and contains defines common to both. */
+
 #pragma once
 
 #include "config_common.h"

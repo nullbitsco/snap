@@ -13,7 +13,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-// clang-format off
+
+/* NOTE: This config file is specific to AVR builds. */
+
 #pragma once
 
 #include "config_common.h"

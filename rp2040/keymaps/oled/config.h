@@ -1,4 +1,4 @@
-/* Copyright 2022 Chris Tanaka <https://github.com/christanaka>
+/* Copyright 2021 Jay Greco
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,31 +16,10 @@
 
 #pragma once
 
-// Old configuration
+#define MATCH_OLED_RGB_BRIGHTNESS
 #define OLED_BRIGHTNESS 128
 #define OLED_TIMEOUT 30000
-#define OLED_UPDATE_INTERVAL 200
+#define OLED_UPDATE_INTERVAL 250
+#define OLED_FADE_OUT
 
-// On AVR, selectively define RGB modes to save some space
-// VIA support won't fit otherwise
-#if defined(__AVR__)
-#ifdef RGBLIGHT_ENABLE
-#undef RGBLIGHT_ANIMATIONS
-// #define RGBLIGHT_EFFECT_BREATHING
-#define RGBLIGHT_EFFECT_RAINBOW_SWIRL
-#define RGBLIGHT_EFFECT_STATIC_GRADIENT
-#endif //RGB LIGHT_ENABLE
-#endif //__AVR__
-
-
-// Split configuration
 #define SPLIT_TRANSPORT_MIRROR
-#define SPLIT_WPM_ENABLE
-
-// Typehud configuration
-// #define TYPEHUD_FILLGRAPH
-#define TYPEHUD_MATRIX_COLS 16
-// #define TYPEHUD_MASTER
-// #define TYPEHUD_MATRIX_ROTATE_90
-// #define TYPEHUD_MATRIX_ROTATE_180
-// #define TYPEHUD_MATRIX_ROTATE_270
