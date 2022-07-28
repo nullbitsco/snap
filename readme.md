@@ -2,7 +2,7 @@
 
 ![SNAP](https://nullbits.co/static/img/snap10.jpg)
 
-A unique, tweakable split 75% keyboard kit built by nullbits. [More info at nullbits.co](https://nullbits.co/nibble/)
+A unique, tweakable split 75% keyboard kit built by nullbits. [More info at nullbits.co](https://nullbits.co/snap/)
 
 * Keyboard Maintainer: [Jay Greco](https://github.com/jaygreco)
 * Hardware Supported: SNAP Rev1, Pro Micro comaptible MCUs.
