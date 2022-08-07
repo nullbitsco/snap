@@ -26,18 +26,8 @@
 #define USB_SUSPEND_WAKEUP_DELAY 250
 #define NO_SUSPEND_POWER_DOWN
 
-/* USB Device descriptor parameter */
-#define VENDOR_ID       0x6E61
-#define PRODUCT_ID      0x6063
-
-#define DEVICE_VER      0x0001
-#define MANUFACTURER    nullbits
-#define PRODUCT         SNAP
-
 /* space savers */
 // #define NO_ACTION_TAPPING // Waiting on QMK #11528
-#define NO_ACTION_MACRO
-#define NO_ACTION_FUNCTION
 #define NO_ACTION_ONESHOT
 #define IGNORE_MOD_TAP_INTERRUPT
 #define TAPPING_FORCE_HOLD

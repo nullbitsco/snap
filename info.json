@@ -1,6 +1,11 @@
 {
-    "keyboard_name": "SNAP Split 75%",
+    "keyboard_name": "SNAP",
     "url": "https://nullbits.co/snap/",
+    "usb": {
+        "vid": "0x6E61",
+        "pid": "0x6063",
+        "device_version": "0.0.1"
+    },
     "width": 19.5,
     "height": 7.25,
     "layouts": {
