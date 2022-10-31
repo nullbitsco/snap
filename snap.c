@@ -20,38 +20,6 @@ bool is_alt_tab_active = false;
 uint16_t alt_tab_timer = 0;
 bool muted = false;
 
-typedef struct PACKED {
-    uint8_t r;
-    uint8_t c;
-} encodermap_t;
-
-// Map encoders to their respective virtual matrix entry
-// Allows for encoder control using VIA
-const encodermap_t encoder_map[2][2] = {
-    {{0, 8}, {1, 8}},  // Left encoder matrix location
-    {{6, 8}, {7, 8}},  // Right encoder matrix location
-};
-
-static void process_encoder_matrix(encodermap_t pos) {
-    action_exec((keyevent_t){
-        .key = (keypos_t){.row = pos.r, .col = pos.c}, .pressed = true, .time = (timer_read() | 1) /* time should not be 0 */
-    });
-#if TAP_CODE_DELAY > 0
-    wait_ms(TAP_CODE_DELAY);
-#endif
-    action_exec((keyevent_t){
-        .key = (keypos_t){.row = pos.r, .col = pos.c}, .pressed = false, .time = (timer_read() | 1) /* time should not be 0 */
-    });
-}
-
-bool encoder_update_kb(uint8_t index, bool clockwise) {
-    #ifdef ENCODER_ENABLE
-    if (!encoder_update_user(index, clockwise)) return false;
-    #endif
-    process_encoder_matrix(encoder_map[index][clockwise ? 0 : 1]);
-    return true;
-}
-
 void matrix_init_kb(void) {
     set_bitc_LED(LED_OFF);
     matrix_init_remote_kb();
