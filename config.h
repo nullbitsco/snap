@@ -31,6 +31,7 @@
 #define NO_ACTION_ONESHOT
 #define IGNORE_MOD_TAP_INTERRUPT
 #define TAPPING_FORCE_HOLD
+#define DYNAMIC_KEYMAP_LAYER_COUNT 3
 
 /* split config */
 // #define SPLIT_USB_DETECT // Enable if you have issues with USB
