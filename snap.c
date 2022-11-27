@@ -47,12 +47,8 @@ void matrix_scan_kb(void) {
 }
 
 // Use Bit-C LED to show CAPS LOCK and NUM LOCK status
-bool led_update_kb(led_t led_state) {
-    bool res = led_update_user(led_state);
-    if (res) {
-        if (is_keyboard_master()) set_bitc_LED(led_state.caps_lock ? LED_DIM : LED_OFF);
-    }
-    return res;
+void led_update_ports(led_t led_state) {
+    if (is_keyboard_master()) set_bitc_LED(led_state.caps_lock ? LED_DIM : LED_OFF);
 }
 
 bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
@@ -65,7 +61,7 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
     if (!process_record_user(keycode, record)) return false;
 
     switch (keycode) {
-        case RESET:
+        case QK_BOOT:
             if (record->event.pressed && is_keyboard_master()) {
                 set_bitc_LED(LED_DIM);
                 #ifdef RGBLIGHT_ENABLE

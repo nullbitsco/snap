@@ -1,5 +1,6 @@
 {
     "keyboard_name": "SNAP",
+    "manufacturer": "nullbits",
     "url": "https://nullbits.co/snap/",
     "usb": {
         "vid": "0x6E61",
