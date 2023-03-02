@@ -21,17 +21,18 @@
 #define OLED_TIMEOUT 30000
 #define OLED_UPDATE_INTERVAL 200
 
-// Selectively define RGB modes to save some space
+// Selectively undefine to save space
 // VIA support won't fit otherwise
 #ifdef RGBLIGHT_ENABLE
-// clang-format off
 #undef RGBLIGHT_LED_MAP
-#undef RGBLIGHT_ANIMATIONS
-// #define RGBLIGHT_EFFECT_BREATHING
-#define RGBLIGHT_EFFECT_RAINBOW_SWIRL
-#define RGBLIGHT_EFFECT_STATIC_GRADIENT
-// clang-format on
-#endif
+#undef RGBLIGHT_EFFECT_SNAKE
+#undef RGBLIGHT_EFFECT_KNIGHT
+#undef RGBLIGHT_EFFECT_CHRISTMAS
+#undef RGBLIGHT_EFFECT_STATIC_GRADIENT
+#undef RGBLIGHT_EFFECT_RGB_TEST
+#undef RGBLIGHT_EFFECT_ALTERNATING
+#undef RGBLIGHT_EFFECT_TWINKLE
+#endif //RGB LIGHT_ENABLE
 
 // Split configuration
 #define SPLIT_TRANSPORT_MIRROR
