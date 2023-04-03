@@ -1,5 +1,8 @@
 # SNAP
 
+## THIS REPO IS NO LONGER ACTIVELY UPDATED, SINCE THE NIBBLE IS OFFICIALLY SUPPORTED WITHIN QMK.
+## [FIND IT HERE](https://github.com/qmk/qmk_firmware/tree/master/keyboards/nullbitsco/snap)
+
 ![SNAP](https://nullbits.co/static/img/snap10.jpg)
 
 A unique, tweakable split 75% keyboard kit built by nullbits. [More info at nullbits.co](https://nullbits.co/snap/)
